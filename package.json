@@ -1,6 +1,7 @@
 {
   "name": "cap-web-atelier",
   "version": "0.1.0",
+  "private": true,
   "type": "module",
   "engines": {
     "node": ">=24.20.0"
