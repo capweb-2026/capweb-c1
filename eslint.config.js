@@ -36,8 +36,7 @@ const globalesNavigateur = {
   clearInterval: "readonly",
   requestAnimationFrame: "readonly",
   cancelAnimationFrame: "readonly",
-  console: "readonly",
-  Intl: "readonly"
+  console: "readonly"
 };
 
 // Globales Node pour serveur, scripts, tests et config.
@@ -59,8 +58,7 @@ const globalesNode = {
   setImmediate: "readonly",
   clearImmediate: "readonly",
   globalThis: "readonly",
-  performance: "readonly",
-  Intl: "readonly"
+  performance: "readonly"
 };
 
 export default [
@@ -92,7 +90,6 @@ export default [
       "scripts/**/*.js",
       "tests/**/*.js",
       "playwright.config.js",
-      "playwright.smoke.config.js",
       "eslint.config.js"
     ],
     languageOptions: {

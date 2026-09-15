@@ -4,9 +4,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createApp } from '../server/app.js';
 
-// Tests rouges J1 pour Cap Web.
-// Vérifie le contrat statique du serveur local (outillage fourni).
-// Ces tests échouent tant que server/app.js et public/ manquent.
+// Contrôles du serveur local fourni pour Cap Web.
+// La suite passe sur le point de départ ; elle ne valide pas les TP HTML/CSS.
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

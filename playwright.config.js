@@ -9,8 +9,6 @@ const avecCanalChrome = process.env.PLAYWRIGHT_CHANNEL === "chrome";
 
 export default defineConfig({
   testDir: "./browser",
-  // Le smoke test vise un déploiement réel : il a sa propre configuration.
-  testIgnore: /smoke\.spec\.js$/,
   fullyParallel: false,
   workers: 1,
   retries: 0,
