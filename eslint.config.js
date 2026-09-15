@@ -91,6 +91,7 @@ export default [
       "tests/**/*.js",
       "*.config.js",
       "playwright.config.js",
+      "playwright.smoke.config.js",
       "eslint.config.js"
     ],
     languageOptions: {
