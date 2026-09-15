@@ -89,6 +89,7 @@ export default [
       "server/**/*.js",
       "scripts/**/*.js",
       "tests/**/*.js",
+      "*.config.js",
       "playwright.config.js",
       "eslint.config.js"
     ],
