@@ -1,3 +1,4 @@
+/* global localStorage -- callback exécuté dans la page */
 import { test, expect } from '@playwright/test';
 
 // Tests d'identité ArtBot dans le navigateur — critères SPEC 1 à 5.
