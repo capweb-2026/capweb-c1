@@ -78,6 +78,7 @@ formulaire?.addEventListener('submit', async (event) => {
 
     if (apiRes.ok) {
       const data = await apiRes.json();
+      console.log('[ArtBot Client] /api/chat response:', data);
       if (data.ok && data.text) {
         botReply = data.text;
         source = data.source || 'regles';

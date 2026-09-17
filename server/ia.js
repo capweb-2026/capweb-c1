@@ -78,9 +78,11 @@ async function defaultProvider(message) {
     const data = await response.json();
     const text = data.choices?.[0]?.message?.content;
     if (!text) {
+      console.error('[ArtBot IA Error] Réponse JSON sans choices[0].message.content:', data);
       return { ok: false };
     }
 
+    console.log('[ArtBot IA Success] Réponse reçue de l’IA:', text);
     return { ok: true, text };
   } catch (err) {
     console.error('[ArtBot IA Error] Fetch exception:', err?.message || err);
