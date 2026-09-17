@@ -290,3 +290,11 @@ export function replyTo(message, historyCount = 0, lang = 'fr') {
     ? 'I am your Paris museums guide. Ask a question by category (antiquities, war, modern art) or museum (Louvre, Rodin, Cluny...) or type /aide.'
     : 'Je suis votre guide des musées à Paris. Posez une question par catégorie (antiquités, guerre, art moderne, impressionnisme) ou par musée (Louvre, Rodin, Cluny...) ou tapez /aide.';
 }
+
+export function getResponse(question) {
+  const base = replyTo(question);
+  if (typeof base === 'string' && base.includes('ArtBot')) {
+    return base;
+  }
+  return `${base} — ArtBot`;
+}

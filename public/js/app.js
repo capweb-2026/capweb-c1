@@ -1,5 +1,5 @@
 import { validateMessage, replyTo } from './brain.js';
-import { renderMessages } from './view.js';
+import { renderMessages, renderPersona } from './view.js';
 
 const formulaire = document.querySelector('#chat-form');
 const champ = document.querySelector('#message');
@@ -66,7 +66,8 @@ formulaire?.addEventListener('submit', (event) => {
     currentLang = 'fr';
   }
 
-  const botReply = replyTo(userText, historique.length, currentLang);
+  const baseReply = replyTo(userText, historique.length, currentLang);
+  const botReply = typeof baseReply === 'string' && baseReply.includes('ArtBot') ? baseReply : `${baseReply} — ArtBot`;
 
   historique.push({ role: 'user', text: userText });
   historique.push({ role: 'assistant', text: botReply });
@@ -99,4 +100,5 @@ fetch('/version.json', { headers: { accept: 'application/json' } })
   .catch(() => {});
 
 // Chargement initial au démarrage
+renderPersona();
 chargerHistorique();
