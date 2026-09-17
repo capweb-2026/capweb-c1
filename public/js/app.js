@@ -38,7 +38,7 @@ function sauvegarderHistorique() {
   }
 }
 
-formulaire?.addEventListener('submit', (event) => {
+formulaire?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!champ) return;
 
@@ -66,8 +66,32 @@ formulaire?.addEventListener('submit', (event) => {
     currentLang = 'fr';
   }
 
-  const baseReply = replyTo(userText, historique.length, currentLang);
-  const botReply = typeof baseReply === 'string' && baseReply.includes('ArtBot') ? baseReply : `${baseReply} — ArtBot`;
+  let botReply = '';
+  let source = 'regles';
+
+  try {
+    const apiRes = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userText }),
+    });
+
+    if (apiRes.ok) {
+      const data = await apiRes.json();
+      if (data.ok && data.text) {
+        botReply = data.text;
+        source = data.source || 'regles';
+      }
+    }
+  } catch (_e) {
+    source = 'regles';
+  }
+
+  if (!botReply) {
+    const baseReply = replyTo(userText, historique.length, currentLang);
+    botReply = typeof baseReply === 'string' && baseReply.includes('ArtBot') ? baseReply : `${baseReply} — ArtBot`;
+    source = 'regles';
+  }
 
   historique.push({ role: 'user', text: userText });
   historique.push({ role: 'assistant', text: botReply });
@@ -76,7 +100,9 @@ formulaire?.addEventListener('submit', (event) => {
   renderMessages(historique, liste);
 
   champ.value = '';
-  if (statut) statut.textContent = '';
+  if (statut) {
+    statut.textContent = source === 'regles' ? 'Mode dégradé' : '';
+  }
   champ.focus();
 });
 

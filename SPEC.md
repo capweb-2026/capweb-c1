@@ -28,6 +28,8 @@ ArtBot est un assistant consacré aux musées et aux œuvres d'art. Il aide l'ut
 4. Quand l'utilisateur consulte les suggestions, le système affiche exactement trois questions suggérées liées aux musées et aux œuvres d'art.
 5. Quand l'utilisateur pose une question correspondant au thème des musées et des œuvres d'art, le système fournit une réponse signée `ArtBot`.
 6. Quand la suite de tests CP1 est exécutée, le système conserve un contrat toujours vert.
+7. Quand une question est envoyée au serveur via `/api/chat`, la réponse provient de la passerelle d'IA si celle-ci répond en moins de 4 secondes.
+8. Quand la passerelle d'IA est indisponible, en erreur ou dépasse 4 secondes, le système retombe sur le moteur de règles locales et affiche l'information de mode dégradé dans `#status`.
 
 ## Hors périmètre
 
