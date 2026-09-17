@@ -22,10 +22,9 @@ L'humain reste responsable des décisions, des validations, des commits et des f
 - Ne jamais utiliser Git.
 - Ne jamais créer de commit, de branche ou de pull request.
 - Ne jamais pousser de code vers un dépôt distant.
-- Ne jamais demander ou utiliser une clé API, un secret ou un fichier `.env`.
-- Ne jamais désactiver ou contourner un contrôle du harnais.
-- Ne jamais modifier la configuration de la CI pour faire passer artificiellement les tests.
-- Ne jamais supprimer ou affaiblir un test pour faire passer le code.
+- Ne jamais lire, afficher, créer ni commiter `.env` ou une clé.
+- Aucun appel à la passerelle en dehors du module serveur qui lui est dédié.
+- Tout appel au modèle a un délai maximal et un repli testé sans clé.
 - Proposer un plan court avant toute modification importante.
 - Procéder par petites étapes et demander à l'humain de lancer les tests après chaque étape.
 - Signaler toute ambiguïté dans `SPEC.md` avant de prendre une décision importante.
