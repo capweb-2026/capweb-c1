@@ -70,7 +70,8 @@ export default [
       "**/dist/**",
       "**/test-results/**",
       "**/playwright-report/**",
-      "**/coverage/**"
+      "**/coverage/**",
+      "j2-etudiants/**"
     ]
   },
   {

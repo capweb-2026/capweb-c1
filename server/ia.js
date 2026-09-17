@@ -7,7 +7,7 @@ export async function askIA(rawMessage, options = {}) {
   }
 
   const message = validation.value;
-  const timeoutMs = options.timeoutMs ?? 3500;
+  const timeoutMs = options.timeoutMs ?? 10000;
   const provider = options.provider ?? defaultProvider;
 
   try {
@@ -31,12 +31,22 @@ async function defaultProvider(message) {
   const key = (process.env.CAPWEB_IA_CLE || '').trim();
 
   if (!url || !key) {
-    console.error('[ArtBot IA Error] Variable CAPWEB_IA_URL ou CAPWEB_IA_CLE manquante dans process.env');
     return { ok: false };
   }
 
-  const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
-  const endpoint = cleanUrl.endsWith('/v1') ? `${cleanUrl}/chat/completions` : `${cleanUrl}/v1/chat/completions`;
+  let cleanUrl = url.trim();
+  while (cleanUrl.endsWith('/')) {
+    cleanUrl = cleanUrl.slice(0, -1);
+  }
+
+  let endpoint = cleanUrl;
+  if (!cleanUrl.endsWith('/chat/completions')) {
+    if (cleanUrl.endsWith('/v1')) {
+      endpoint = `${cleanUrl}/chat/completions`;
+    } else {
+      endpoint = `${cleanUrl}/v1/chat/completions`;
+    }
+  }
 
   try {
     const response = await fetch(endpoint, {
@@ -61,20 +71,19 @@ async function defaultProvider(message) {
     });
 
     if (!response.ok) {
-      console.error(`[ArtBot IA Error] La passerelle a répondu HTTP ${response.status}: ${response.statusText}`);
+      console.error(`[ArtBot IA Error] HTTP ${response.status}: ${response.statusText}`);
       return { ok: false };
     }
 
     const data = await response.json();
     const text = data.choices?.[0]?.message?.content;
     if (!text) {
-      console.error('[ArtBot IA Error] Réponse JSON de la passerelle sans message content');
       return { ok: false };
     }
 
     return { ok: true, text };
   } catch (err) {
-    console.error('[ArtBot IA Error] Exception lors de l’appel fetch :', err?.message || err);
+    console.error('[ArtBot IA Error] Fetch exception:', err?.message || err);
     return { ok: false };
   }
 }
