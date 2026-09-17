@@ -27,14 +27,15 @@ export async function askIA(rawMessage, options = {}) {
 }
 
 async function defaultProvider(message) {
-  const url = process.env.CAPWEB_IA_URL;
-  const key = process.env.CAPWEB_IA_CLE;
+  const url = (process.env.CAPWEB_IA_URL || '').trim();
+  const key = (process.env.CAPWEB_IA_CLE || '').trim();
 
   if (!url || !key) {
     return { ok: false };
   }
 
-  const endpoint = url.endsWith('/') ? `${url}chat/completions` : `${url}/chat/completions`;
+  const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+  const endpoint = cleanUrl.endsWith('/v1') ? `${cleanUrl}/chat/completions` : `${cleanUrl}/v1/chat/completions`;
 
   const response = await fetch(endpoint, {
     method: 'POST',
