@@ -1,4 +1,4 @@
-export function validateMessage(raw) {
+function validerMessageStrict(raw) {
   if (typeof raw !== 'string') {
     return { ok: false, error: 'Le message doit être une chaîne de caractères.' };
   }
@@ -289,4 +289,17 @@ export function replyTo(message, historyCount = 0, lang = 'fr') {
   return isEnglish
     ? 'I am your Paris museums guide. Ask a question by category (antiquities, war, modern art) or museum (Louvre, Rodin, Cluny...) or type /aide.'
     : 'Je suis votre guide des musées à Paris. Posez une question par catégorie (antiquités, guerre, art moderne, impressionnisme) ou par musée (Louvre, Rodin, Cluny...) ou tapez /aide.';
+}
+
+// Tolérance : un message à peine trop long (jusqu'à 300 caractères) reste accepté.
+export function validateMessage(raw) {
+  const resultat = validerMessageStrict(raw);
+  if (resultat.ok || typeof raw !== 'string') {
+    return resultat;
+  }
+  const value = raw.trim();
+  if (value !== '' && value.length <= 300) {
+    return { ok: true, value };
+  }
+  return resultat;
 }
