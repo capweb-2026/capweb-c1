@@ -45,8 +45,7 @@ test('askIA — refuse un message vide ou composé d’espaces', async () => {
 });
 
 test('POST /api/chat — route serveur local sans clé retourne mode règles', async () => {
-  const app = createApp();
-  const server = http.createServer(app);
+  const server = createApp({ publicDir: './public' });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const port = server.address().port;
 

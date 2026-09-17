@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { askIA } from './ia.js';
 
 // Liste explicite : seuls ces chemins publics sont servis.
 const FICHIERS = {
@@ -9,7 +10,8 @@ const FICHIERS = {
   '/styles.css': 'styles.css',
   '/js/app.js': 'js/app.js',
   '/js/brain.js': 'js/brain.js',
-  '/js/view.js': 'js/view.js'
+  '/js/view.js': 'js/view.js',
+  '/js/persona.js': 'js/persona.js'
 };
 
 // MIME corrects pour chaque fichier servi.
@@ -18,7 +20,8 @@ const TYPES = {
   'styles.css': 'text/css; charset=utf-8',
   'js/app.js': 'text/javascript; charset=utf-8',
   'js/brain.js': 'text/javascript; charset=utf-8',
-  'js/view.js': 'text/javascript; charset=utf-8'
+  'js/view.js': 'text/javascript; charset=utf-8',
+  'js/persona.js': 'text/javascript; charset=utf-8'
 };
 
 export function createApp({ publicDir, version = 'dev' } = {}) {
@@ -34,12 +37,6 @@ export function createApp({ publicDir, version = 'dev' } = {}) {
 
   async function traiter(req, res) {
     const methode = (req.method ?? 'GET').toUpperCase();
-    // Seules GET et HEAD sont autorisées (outillage statique J1).
-    if (methode !== 'GET' && methode !== 'HEAD') {
-      res.writeHead(405, { 'content-type': 'text/plain; charset=utf-8' });
-      res.end('Méthode non autorisée');
-      return;
-    }
     let chemin = '/';
     try {
       // URL puis décodage : tout encodage suspect hors liste donne 404.
@@ -48,6 +45,34 @@ export function createApp({ publicDir, version = 'dev' } = {}) {
     } catch {
       res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
       res.end('Non trouvé');
+      return;
+    }
+
+    if (methode === 'POST' && chemin === '/api/chat') {
+      const bodyStr = await new Promise((resolve, reject) => {
+        let data = '';
+        req.on('data', (chunk) => { data += chunk; });
+        req.on('end', () => resolve(data));
+        req.on('error', reject);
+      });
+
+      let msg = '';
+      try {
+        const parsed = JSON.parse(bodyStr);
+        msg = parsed?.message || '';
+      } catch (_e) {
+        msg = '';
+      }
+      const reponse = await askIA(msg);
+      const corps = JSON.stringify(reponse);
+      res.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'content-length': Buffer.byteLength(corps) });
+      res.end(corps);
+      return;
+    }
+
+    if (methode !== 'GET' && methode !== 'HEAD') {
+      res.writeHead(405, { 'content-type': 'text/plain; charset=utf-8' });
+      res.end('Méthode non autorisée');
       return;
     }
     // Métadonnée de version fournie au démarrage.
