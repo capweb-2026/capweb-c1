@@ -2,7 +2,6 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { askIA } from '../server/ia.js';
 import { createApp } from '../server/app.js';
-import http from 'node:http';
 
 test('askIA — réponse du fournisseur d’IA', async () => {
   const mockProvider = async (question) => {
