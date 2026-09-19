@@ -7,7 +7,7 @@ export async function askIA(rawMessage, options = {}) {
   }
 
   const message = validation.value;
-  const timeoutMs = options.timeoutMs ?? 4000;
+  const timeoutMs = options.timeoutMs ?? 4500;
   const provider = options.provider ?? defaultProvider;
 
   try {
